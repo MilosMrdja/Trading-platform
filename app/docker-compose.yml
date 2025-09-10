@@ -1,0 +1,79 @@
+version: "3.8"
+
+services:
+  zookeeper:
+    image: confluentinc/cp-zookeeper:7.2.15
+    container_name: zookeeper
+    environment:
+      ZOOKEEPER_CLIENT_PORT: 2181
+      ZOOKEEPER_TICK_TIME: 2000
+    ports:
+      - "2181:2181"
+
+  kafka:
+    image: confluentinc/cp-kafka:7.2.15
+    container_name: kafka
+    depends_on:
+      - zookeeper
+    ports:
+      - "9092:9092"
+    environment:
+      KAFKA_BROKER_ID: 1
+      KAFKA_ZOOKEEPER_CONNECT: host.docker.internal:2181
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://host.docker.internal:9092
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+
+  postgres:
+    image: postgres:16
+    container_name: postgres
+    environment:
+      POSTGRES_DB: TradeApp
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: 123
+    ports:
+      - "5433:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready -U postgres" ]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  trade-app:
+    image: trade-app:latest
+    container_name: trade-app-container
+    depends_on:
+      kafka:
+        condition: service_started
+      postgres:
+        condition: service_healthy
+    environment:
+      DB_URL: jdbc:postgresql://host.docker.internal:5433/TradeApp
+      DB_USER: postgres
+      DB_PASSWORD: 123
+      KAFKA_SERVERS: host.docker.internal:9092
+      SCHEDULER_CRON_ACCOUNT_SYNC: 0 35 11 * * *
+    ports:
+      - "8080:8080"
+
+  myabalance-service-app:
+    image: balance-service:latest
+    container_name: balance-service-container
+    ports:
+      - "8081:8081"
+    depends_on:
+      - kafka
+    environment:
+      KAFKA_SERVERS: host.docker.internal:9092
+
+  trade-platform:
+    container_name: trade-platform-container
+    image: trade-platform:latest
+    environment:
+      - API_BASE_URL=http://trade-app:8080
+    ports:
+      - "80:80"
+
+volumes:
+  pgdata:

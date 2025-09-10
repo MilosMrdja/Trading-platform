@@ -1,0 +1,29 @@
+<div class="auth-container">
+  <div class="auth-card">
+    <h2>Sign in</h2>
+    <p class="subtitle">Welcome back! Please sign in to your account.</p>
+
+    <form #f="ngForm" (ngSubmit)="onLogin(f)">
+      <div class="form-field">
+        <label for="email">Email</label>
+        <input id="email" type="email" [(ngModel)]="email" name="email" required email placeholder="you@example.com" />
+        <div class="error" *ngIf="f.submitted && f.controls['email']?.invalid">
+          Please enter a valid email.
+        </div>
+      </div>
+
+      <div class="form-field">
+        <label for="password">Password</label>
+        <input id="password" type="password" [(ngModel)]="password" name="password" required minlength="6" placeholder="••••••••" />
+        <div class="error" *ngIf="f.submitted && f.controls['password']?.invalid">
+          Password must be at least 6 characters.
+        </div>
+      </div>
+
+      <button class="primary" type="submit" [disabled]="isLoading || f.invalid">{{ isLoading ? 'Signing in...' : 'Sign in' }}</button>
+      <div class="error" *ngIf="errorMessage">{{ errorMessage }}</div>
+    </form>
+
+    <p class="alt-link">Don’t have an account? <a routerLink="/register">Create one</a></p>
+  </div>
+</div>

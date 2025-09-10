@@ -1,0 +1,8 @@
+package com.trade_app.domain.enums;
+
+public enum Status {
+    OPEN,
+    EXERCISED,
+    CLOSED,
+    MATCHED
+}

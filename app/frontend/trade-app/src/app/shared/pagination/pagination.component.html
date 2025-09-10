@@ -1,0 +1,19 @@
+<div class="flex justify-between items-center mt-4">
+  <button
+    (click)="goToPrevious()"
+    [disabled]="currentPage === 0"
+    class="px-4 py-2 m-2 rounded hover:bg-gray-100 dark:hover:bg-gray-700 border border-gray-300 dark:border-gray-700 text-gray-700 dark:text-gray-400">
+    Previous
+  </button>
+
+  <span class="text-gray-700 dark:text-gray-400">
+    Page {{currentPage+1}} of {{ totalPages }}
+  </span>
+
+  <button
+    (click)="goToNext()"
+    [disabled]="currentPage+1 === totalPages"
+    class="px-4 py-2 m-2 rounded hover:bg-gray-100 dark:hover:bg-gray-700 border border-gray-300 dark:border-gray-700 text-gray-700 dark:text-gray-400">
+    Next
+  </button>
+</div>

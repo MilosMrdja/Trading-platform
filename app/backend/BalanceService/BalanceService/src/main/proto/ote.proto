@@ -1,0 +1,23 @@
+syntax = "proto3";
+
+package com.trade_app;
+
+option java_package = "com.trade_app.kafka.proto";
+option java_outer_classname = "OteProto";
+
+message Trade {
+  int64 tradeId = 1;
+  int64 instrumentId = 2;
+  int64 accountId = 3;
+  double price = 4;
+  int32 quantity = 5;
+  string direction = 6;
+}
+
+message TradeList {
+  repeated Trade trades = 1;
+}
+
+message OtePerAccount {
+  map<int64, double> oteMap = 1; // accountId -> OTE
+}

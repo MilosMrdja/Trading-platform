@@ -1,0 +1,22 @@
+<header class="app-header">
+  <div class="brand">
+    <span class="logo">⧉</span>
+    <span class="title">{{ userName ?? "Trading platform" }}</span>
+
+  </div>
+
+  <nav class="nav-links">
+    <a routerLink="/manager" routerLinkActive="active" [routerLinkActiveOptions]="{exact:true}">Dashboard</a>
+    <a routerLink="/manager/users" routerLinkActive="active">Users</a>
+    <a routerLink="/manager/instruments" routerLinkActive="active">Instruments</a>
+    <a routerLink="/manager/accounts" routerLinkActive="active">Accounts</a>
+  </nav>
+
+  <div class="right-section">
+    <button class="logout" (click)="onLogout()">Logout</button>
+  </div>
+</header>
+
+<main class="content">
+  <router-outlet></router-outlet>
+</main>

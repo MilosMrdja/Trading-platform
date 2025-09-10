@@ -1,0 +1,61 @@
+<app-loading *ngIf="loading"></app-loading>
+<app-error-page *ngIf="error && !loading" [message]="error"></app-error-page>
+
+<div *ngIf="!loading && !error" class="relative overflow-x-auto shadow-md sm:rounded-lg">
+  <div class="mb-6 flex items-center gap-6">
+    <h2 class="text-3xl ml-10 mt-1 font-extrabold text-gray-800 dark:text-gray-700 tracking-wide">
+      Users
+    </h2>
+    <button (click)="openAddModal()" class="flex items-center justify-center w-10 h-10 bg-green-600 text-white rounded-full hover:bg-green-700">
+      <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/>
+      </svg>
+    </button>
+  </div>
+
+  <table class="w-full text-base text-left text-gray-700 dark:text-gray-300">
+    <thead class="text-sm font-bold uppercase bg-gray-100 dark:bg-gray-700 dark:text-gray-400">
+    <tr>
+      <th class="px-6 py-3">ID</th>
+      <th class="px-6 py-3">Name</th>
+      <th class="px-6 py-3">Email</th>
+      <th class="px-6 py-3">Role</th>
+      <th class="px-6 py-3 text-right">Actions</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr *ngFor="let user of users" class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
+      <td class="px-6 py-4 font-medium">{{ user.id }}</td>
+      <td class="px-6 py-4 font-medium">{{ user.name }}</td>
+      <td class="px-6 py-4 font-medium">{{ user.email }}</td>
+      <td class="px-6 py-4 font-medium">{{ user.role }}</td>
+      <td class="px-6 py-4 text-right flex justify-end gap-2">
+        <button (click)="openEditModal(user)" class="p-2 bg-blue-600 text-white rounded hover:bg-blue-700">
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                  d="M15.232 5.232l3.536 3.536M16.5 3.75a2.121 2.121 0 113 3L7 19.25H4v-3L16.5 3.75z"/>
+          </svg>
+        </button>
+
+      </td>
+    </tr>
+    <tr *ngIf="users.length === 0">
+      <td colspan="4" class="text-center py-6 text-gray-500 italic">
+        There is no data
+      </td>
+    </tr>
+    </tbody>
+  </table>
+</div>
+
+<app-pagination *ngIf="!loading && !error" [currentPage]="currentPage" [totalPages]="totalPages" (pageChange)="goToPage($event)"></app-pagination>
+
+<div *ngIf="showModal" class="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50">
+  <div class="bg-white dark:bg-gray-800 rounded-lg p-6 w-96 relative">
+    <button (click)="closeModal()" class="absolute top-2 right-2 text-gray-500 hover:text-gray-700">&times;</button>
+    <app-user-form [userToEdit]="userToEdit" (formSubmitted)="onFormSubmitted()"></app-user-form>
+  </div>
+</div>
+
+
+<app-toast></app-toast>

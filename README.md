@@ -30,3 +30,18 @@ Technologies
  - Apache Kafka – message broker for asynchronous, event-driven communication between services
 
  - Docker & Docker Compose – containerization and orchestration of services
+
+# Running paltform
+Prerequisites
+Docker – make sure Docker is installed on your machine.
+
+Steps:
+1. Clone the repo
+2. Configure environment variables
+3. Build and start the services
+   - docker-compose up --build
+4. Acces the frontend
+   http://localhost:80
+5. Stopping the platform
+   - docker-compose down
+
